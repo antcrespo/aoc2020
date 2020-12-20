@@ -111,14 +111,8 @@ fn main() {
 fn rule_11_hack(rule_31: &str, rule_42: &str, n: u32) -> String {
     let mut rule = "(?:".to_string();
     for i in 1..=n {
-        rule.push_str(rule_42);
-        rule.push_str("{");
-        rule.push_str(&i.to_string());
-        rule.push_str("}");
-        rule.push_str(rule_31);
-        rule.push_str("{");
-        rule.push_str(&i.to_string());
-        rule.push_str("}");
+        let tmp = format!("{}{{{}}}{}{{{}}}", rule_42, i, rule_31, i);
+        rule.push_str(&tmp);
         if i != n {
             rule.push_str("|");
         }
