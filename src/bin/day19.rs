@@ -32,22 +32,9 @@ enum Rule {
 fn into_regex(rule: &Rule) -> String {
     match rule {
         Rule::Const(constant) => (constant.value.to_string()),
-        Rule::Or(or) => {
-            let mut string = "(?:".to_string();
-            string.push_str(&into_regex(&*or.left));
-            string.push_str("|");
-            string.push_str(&into_regex(&*or.right));
-            string.push_str(")");
-            return string;
-        },
-        Rule::And(and) => {
-            let mut string = into_regex(&*and.left);
-            string.push_str(&into_regex(&*and.right));
-            return string;
-        },
-        Rule::Dupe(dupe) => {
-            return into_regex(&*dupe.rule);
-        }
+        Rule::Or(or) => (format!("(?:{}|{})", into_regex(&*or.left), into_regex(&*or.right))),
+        Rule::And(and) => (format!("{}{}", into_regex(&*and.left), into_regex(&*and.right))),
+        Rule::Dupe(dupe) => (into_regex(&*dupe.rule)),
     }
 }
 
